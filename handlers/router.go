@@ -18,5 +18,8 @@ func Router(db *sql.DB) http.Handler {
 	pages := PageController(db)
 	r.Get("/", pages.Index)
 
+	fs := http.FileServer(http.Dir("assets"))
+	r.Handle("/assets/*", http.StripPrefix("/assets/", fs))
+
 	return r
 }
