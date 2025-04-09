@@ -18,6 +18,9 @@ func Router(db *sql.DB) http.Handler {
 	pages := PageController(db)
 	r.Get("/", pages.Index)
 
+	waiters := WaiterController(db)
+	r.Get("/join", waiters.New)
+
 	fs := http.FileServer(http.Dir("assets"))
 	r.Handle("/assets/*", http.StripPrefix("/assets/", fs))
 
