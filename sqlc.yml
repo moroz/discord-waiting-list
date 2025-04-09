@@ -1,0 +1,14 @@
+version: "2"
+
+sql:
+  - engine: "sqlite"
+    queries: "db/sql/*.sql"
+    schema: "db/migrations"
+    gen:
+      go:
+        out: "db/queries"
+        emit_pointers_for_null_types: true
+        emit_result_struct_pointers: true
+        initialisms:
+          - id
+
