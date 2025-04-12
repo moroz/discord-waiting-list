@@ -10,6 +10,12 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+func init() {
+	if !config.LOG_TIMESTAMPS {
+		log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
+	}
+}
+
 func main() {
 	db, err := sql.Open("sqlite", config.DATABASE_URL)
 	if err != nil {

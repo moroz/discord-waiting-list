@@ -24,3 +24,6 @@ func GetenvWithDefault(key, def string) string {
 var DATABASE_URL = MustGetenv("DATABASE_URL")
 var PORT = GetenvWithDefault("PORT", "3000")
 var LISTEN_ON = ":" + PORT
+var APP_ENV = GetenvWithDefault("APP_ENV", "dev")
+
+var LOG_TIMESTAMPS = APP_ENV == "dev"
