@@ -1,19 +1,49 @@
 {{ define "title" }}Join the waiting list{{ end }}
 
 {{ define "body" -}}
-  <main class="text-center">
-    <h1 class="lg:text-5xl">Hello world!</h1>
+  <section class="text-center">
+    <h1 class="mt-4 text-2xl leading-tight font-bold lg:text-4xl">
+      Hello world!
+    </h1>
 
     <p>
-      There are currently <strong>{{ . }}</strong> people on the waiting list.
+      My name is Karol Moroz.<br />I am a dude from Poland, living in Kaohsiung,
+      Taiwan, and making videos about
+      <a
+        href="https://www.youtube.com/@KarolMoroz"
+        target="_blank"
+        rel="noopener noreferrer"
+        >programming</a
+      >
+      and about
+      <a href="https://www.youtube.com/@MakeTravelingFunAgain">traveling</a>.
     </p>
 
-    <div class="mt-4">
+    <p>This is not my personal website. My personal website is at <a href="https://moroz.dev" target="_blank" rel="noopener noreferrer">moroz.dev</a> and a redesign is long overdue.</p>
+
+    <p>
+      This website is essentially an over-engineered Google Form intended to
+      sign up to become a future member of my Discord server. Once we hit 100
+      sign-ups, we will start a Discord server!
+    </p>
+
+    <div class="my-4">
       <a
         href="/join"
         class="rounded-md bg-blue-600 px-4 py-2 text-lg text-white"
         >Join the waiting list</a
       >
     </div>
-  </main>
+
+    <p>
+      {{- if eq . 0 -}}
+        Be the first to sign up!
+      {{- else if eq . 1 -}}
+        There is currently one person on the waiting list. You can still be the
+        second one!
+      {{- else -}}
+        There are currently <strong>{{ . }}</strong> people on the waiting list.
+      {{- end -}}
+    </p>
+  </section>
 {{- end }}

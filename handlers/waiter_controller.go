@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"net/url"
 
+	"github.com/moroz/discord-waiting-list/services"
 	"github.com/moroz/discord-waiting-list/templates"
 )
 
@@ -30,38 +30,26 @@ func WaiterController(db *sql.DB) *waiterController {
 
 type FormParams struct {
 	Countries []RegionOption
+	Params    services.SignUpParams
+	Errors    services.ValidationErrors
 }
 
 func (c *waiterController) New(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "text/html; charset=utf-8")
 
-	err := templates.FormTemplate.Execute(w, FormParams{countries})
+	err := templates.FormTemplate.Execute(w, FormParams{
+		Countries: countries,
+		Params:    services.SignUpParams{},
+		Errors:    nil,
+	})
 	if err != nil {
 		log.Print(err)
 	}
 }
 
-type SignUpParams struct {
-	Email  string
-	Name   string
-	Bio    *string
-	Region *string
-}
-
 type RegionOption struct {
 	Label string
 	Value string
-}
-
-func (p *SignUpParams) Parse(f url.Values) {
-	p.Email = f.Get("email")
-	p.Name = f.Get("name")
-	if b := f.Get("bio"); b != "" {
-		p.Bio = &b
-	}
-	if r := f.Get("region"); r != "" {
-		p.Region = &r
-	}
 }
 
 func (c *waiterController) Create(w http.ResponseWriter, r *http.Request) {
@@ -70,8 +58,30 @@ func (c *waiterController) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	var params SignUpParams
+	var params services.SignUpParams
 	params.Parse(r.PostForm)
 
-	log.Printf("%#v", params)
+	_, err = services.WaiterService(c.db).CreateWaiter(r.Context(), &params)
+
+	if err, ok := err.(services.ValidationErrors); ok {
+		templates.FormTemplate.Execute(w, FormParams{
+			Countries: countries,
+			Params:    params,
+			Errors:    err,
+		})
+	}
+
+	if err == nil {
+		http.Redirect(w, r, "/success", http.StatusFound)
+		return
+	}
+
+	log.Print(err)
+}
+
+func (c *waiterController) Success(w http.ResponseWriter, r *http.Request) {
+	err := templates.SuccessTemplate.Execute(w, nil)
+	if err != nil {
+		log.Print(err)
+	}
 }

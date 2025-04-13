@@ -2,10 +2,75 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script
+      src="https://kit.fontawesome.com/6d06e1e299.js"
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="/assets/bundle.css" />
     <title>{{ block "title" . -}}Default Title{{- end }}</title>
   </head>
-  <body class="min-h-screen bg-gray-50">
-    {{ block "body" . }}{{ end }}
+  <body class="flex min-h-screen flex-col bg-gray-50">
+    <main class="mx-auto w-[40rem] flex-1">
+      {{ block "body" . }}{{ end }}
+    </main>
+
+    <footer
+      class="flex h-[10rem] flex-col items-center justify-center bg-gray-100 text-center"
+    >
+      <p>
+        &copy; 2025 by Karol Moroz. The source code for this website is
+        available
+        <a
+          href="https://github.com/moroz/discord-infrastructure"
+          target="_blank"
+          rel="noopener noreferrer"
+          >here</a
+        >
+        and
+        <a
+          href="https://github.com/moroz/discord-waiting-list"
+          target="_blank"
+          rel="noopener noreferrer"
+          >here</a
+        >.
+      </p>
+      <div class="mb-4 flex gap-6">
+        <a
+          href="https://www.youtube.com/@KarolMoroz"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="My blog"
+          ><i class="fa-brands fa-square-youtube text-[2rem]"></i
+        ></a>
+        <a
+          href="https://www.instagram.com/make.traveling.fun.again/"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Follow me on Instagram"
+          ><i class="fa-brands fa-square-instagram text-[2rem]"></i
+        ></a>
+        <a
+          href="https://www.threads.net/@make.traveling.fun.again"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Follow me on Threads"
+          ><i class="fa-brands fa-threads text-[2rem]"></i
+        ></a>
+        <a
+          href="https://github.com/moroz"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Github"
+          ><i class="fa-brands fa-github text-[2rem]"></i
+        ></a>
+        <a
+          href="https://moroz.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="My blog"
+          ><i class="fa-solid fa-poo text-[2rem]"></i
+        ></a>
+      </div>
+    </footer>
   </body>
 </html>
