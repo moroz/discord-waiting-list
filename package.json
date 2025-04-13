@@ -5,6 +5,7 @@
   },
   "scripts": {
     "watch": "tailwindcss -i ./assets/css/input.css -o ./assets/dist/bundle.css --watch=always",
+    "build": "tailwindcss -i ./assets/css/input.css -o ./assets/dist/bundle.css --minify",
     "format": "prettier -w templates/**/*.html.tmpl"
   },
   "devDependencies": {
