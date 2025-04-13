@@ -1,9 +1,19 @@
-{{define "title"}}Join the waiting list{{end}}
+{{ define "title" }}Join the waiting list{{ end }}
 
 {{ define "body" -}}
-<h1>Hello world!</h1>
+  <main class="text-center">
+    <h1 class="lg:text-5xl">Hello world!</h1>
 
-<p>There are currently <strong>{{ . }}</strong> people on the waiting list.</p>
+    <p>
+      There are currently <strong>{{ . }}</strong> people on the waiting list.
+    </p>
 
-<a href="/join" class="btn cta">Join the waiting list</a>
-{{- end}}
+    <div class="mt-4">
+      <a
+        href="/join"
+        class="rounded-md bg-blue-600 px-4 py-2 text-lg text-white"
+        >Join the waiting list</a
+      >
+    </div>
+  </main>
+{{- end }}

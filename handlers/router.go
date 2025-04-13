@@ -28,7 +28,7 @@ func Router(db *sql.DB) http.Handler {
 	waiters := WaiterController(db)
 	r.Get("/join", waiters.New)
 
-	fs := http.FileServer(http.Dir("assets"))
+	fs := http.FileServer(http.Dir("assets/dist"))
 	r.Handle("/assets/*", http.StripPrefix("/assets/", fs))
 
 	return r

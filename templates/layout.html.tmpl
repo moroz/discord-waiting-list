@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/assets/style.css" />
-  <title>{{ block "title" . -}}Default Title{{- end }}</title>
-</head>
-<body>
-  {{ block "body" . }}{{end}}
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/assets/bundle.css" />
+    <title>{{ block "title" . -}}Default Title{{- end }}</title>
+  </head>
+  <body class="min-h-screen bg-blue-50">
+    {{ block "body" . }}{{ end }}
+  </body>
 </html>

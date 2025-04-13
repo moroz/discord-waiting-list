@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.3",
+    "tailwindcss": "^4.1.3"
+  },
+  "scripts": {
+    "watch": "tailwindcss -i ./assets/css/input.css -o ./assets/dist/bundle.css --watch=always",
+    "format": "prettier -w templates/**/*.html.tmpl"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "prettier-plugin-go-template": "^0.0.15",
+    "prettier-plugin-tailwindcss": "^0.6.11"
+  }
+}
