@@ -1,0 +1,4 @@
+export DATABASE_URL=./dev.db
+export GOOSE_DBSTRING=$DATABASE_URL
+export GOOSE_MIGRATION_DIR=db/migrations
+export GOOSE_DRIVER=sqlite

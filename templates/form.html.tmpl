@@ -1,5 +1,53 @@
 {{ define "title" }}Sign up{{ end }}
 
 {{ define "body" -}}
-  <h1>Sign up for Discord</h1>
+  <div class="mx-auto w-[35rem]">
+    <h1 class="mt-4 mb-2 text-center text-2xl font-bold tracking-tight">
+      Sign up for Discord
+    </h1>
+    <form action="/join" method="POST">
+      <div class="grid gap-6">
+        <div class="grid gap-2">
+          <label class="font-bold" for="email"> Email: <span class="text-red-600">*</span></label>
+          <input
+            type="text"
+            name="email"
+            id="email"
+            autocomplete="email"
+            class="h-9 w-full rounded-md border px-3 py-1 shadow-sm focus-visible:ring-1 focus-visible:outline-none text-base bg-white"
+            autofocus
+          />
+        </div>
+
+        <div class="grid gap-2">
+          <label class="font-bold" for="name"> Name or nickname: <span class="text-red-600">*</span></label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            autocomplete="name"
+            class="h-9 w-full rounded-md border px-3 py-1 shadow-sm focus-visible:ring-1 focus-visible:outline-none text-base bg-white"
+          />
+        </div>
+
+        <div class="grid gap-2">
+          <label class="font-bold" for="region"> Country or region: <span class="text-gray-600 font-normal text-sm">(optional)</span></label>
+          <select name="region" class="h-9 w-full rounded-md border px-3 py-1 shadow-sm focus-visible:ring-1 focus-visible:outline-none text-base bg-white">
+            <option value="">&mdash;</option>
+            {{range .Countries}}
+              <option value="{{ .Value }}">{{ .Label }}</option>
+            {{ end }}
+          </select>
+        </div>
+
+        <div class="grid gap-2">
+          <label class="font-bold" for="bio">Is there anything you would like to share with me or other people in the community? <span class="text-gray-600 font-normal text-sm">(optional)</span></label>
+          <textarea name="bio" id="bio" class="rounded-md border px-3 shadow-sm focus-visible:ring-1 focus-visible:outline-none bg-white text-base py-2" rows="5">
+          </textarea>
+        </div>
+
+        <button type="submit" class="bg-gray-600 text-white font-semibold py-2 px-3 rounded-md hover:bg-gray-500 cursor-pointer transition">Submit</button>
+      </div>
+    </form>
+  </div>
 {{- end }}
