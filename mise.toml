@@ -2,6 +2,7 @@
 go = "latest"
 node = "lts"
 "npm:pnpm" = "latest"
+ansible = { version = "latest", uvx_args = "--with-executables-from ansible-core" }
 
 [tasks.tag]
 run = """
@@ -9,3 +10,12 @@ DATE="$(date +%Y-%m-%d)"
 git tag $DATE -m "Video tag on ${DATE}"
 git push origin $DATE
 """
+
+[tasks.release]
+description = "Builds rel/release.tar.gz for the shared server (GOOS/GOARCH default to freebsd/amd64)"
+run = "deploy/build-release.sh"
+
+[tasks.deploy]
+description = "Builds a release and deploys it to the shared server"
+dir = "deploy"
+run = "ansible-playbook deploy.yml"

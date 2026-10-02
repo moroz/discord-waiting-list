@@ -1,0 +1,92 @@
+---
+# Builds a release locally and deploys it to the shared server, where
+# github.com/moroz/shared-infrastructure has set up the discord user, service,
+# data directory (/var/db/discord, with prod.db) and environment. The service runs
+# "goose up" from the release's migrations/ before it starts.
+
+- name: Build and deploy discord
+  hosts: all
+  become: true
+  tags: deploy
+
+  vars:
+    app_name: discord
+    app_port: 7000
+    app_base_dir: "/usr/local/lib/{{ app_name }}"
+    release_timestamp: "{{ ansible_facts['date_time'].iso8601_basic_short }}"
+    target_dir: "{{ app_base_dir }}/releases/{{ release_timestamp }}"
+    code_dir: ".."
+
+  tasks:
+    - name: Build the release
+      delegate_to: localhost
+      become: false
+      run_once: true
+      ansible.builtin.command:
+        cmd: deploy/build-release.sh
+        chdir: "{{ code_dir }}"
+      environment:
+        GOOS: "{{ ansible_facts['system'] | lower }}"
+        GOARCH: "{{ {'x86_64': 'amd64', 'amd64': 'amd64', 'aarch64': 'arm64', 'arm64': 'arm64'}[ansible_facts['architecture']] }}"
+
+    - name: Create the release directory
+      ansible.builtin.file:
+        path: "{{ target_dir }}"
+        state: directory
+        owner: "{{ ansible_user | default('deploy') }}"
+        group: "{{ app_name }}"
+        mode: "0751"
+
+    - name: Unpack the release
+      ansible.builtin.unarchive:
+        src: "{{ code_dir }}/rel/release.tar.gz"
+        dest: "{{ target_dir }}"
+        owner: "{{ ansible_user | default('deploy') }}"
+        group: "{{ app_name }}"
+
+    - name: Make the release current
+      ansible.builtin.file:
+        src: "{{ target_dir }}"
+        dest: "{{ app_base_dir }}/current"
+        state: link
+        force: true
+
+    - name: Restart discord
+      ansible.builtin.service:
+        name: "{{ app_name }}"
+        state: restarted
+
+    # The home page counts the waiting list, so it fails unless the database opens
+    # and is migrated; the stylesheet shows the release's assets/dist is in place,
+    # since the server serves it itself.
+    - name: Check that discord is up
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:{{ app_port }}{{ item }}"
+        status_code: [200]
+      loop: [/, /assets/bundle.css]
+      register: health
+      until: health is succeeded
+      retries: 10
+      delay: 2
+
+- name: Remove old releases
+  hosts: all
+  become: true
+  tags: clean
+
+  vars:
+    app_base_dir: /usr/local/lib/discord
+    keep_releases: 5
+
+  tasks:
+    - name: List the releases
+      ansible.builtin.find:
+        paths: "{{ app_base_dir }}/releases"
+        file_type: directory
+      register: releases
+
+    - name: Delete all but the newest releases
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop: "{{ (releases.files | map(attribute='path') | sort(reverse=True))[keep_releases:] }}"

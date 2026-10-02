@@ -1,0 +1,4 @@
+# @parcel/watcher's install script only builds it from source when no prebuilt
+# binary fits; it is for tailwindcss --watch, which a release doesn't use.
+allowBuilds:
+  "@parcel/watcher": false
