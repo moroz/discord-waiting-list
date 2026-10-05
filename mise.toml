@@ -1,4 +1,5 @@
 [tools]
+ansible = { version = "latest", uvx_args = "--with-executables-from ansible-core" }
 go = "latest"
 node = "lts"
 "npm:pnpm" = "latest"
@@ -9,3 +10,8 @@ DATE="$(date +%Y-%m-%d)"
 git tag $DATE -m "Video tag on ${DATE}"
 git push origin $DATE
 """
+
+[tasks.deploy]
+description = "Builds a release and deploys it to the shared server (github.com/moroz/shared-infrastructure)"
+dir = "deploy"
+run = "ansible-playbook deploy.yml"
